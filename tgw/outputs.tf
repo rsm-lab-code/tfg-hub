@@ -26,11 +26,12 @@ output "route_table_ids" {
     main       = aws_ec2_transit_gateway_route_table.main_rt.id
   }
 }
-
 output "inspection_attachment_id" {
   description = "ID of the Inspection VPC attachment"
-  value = length(aws_ec2_transit_gateway_vpc_attachment.inspection_attachment) > 0 ? aws_ec2_transit_gateway_vpc_attachment.inspection_attachment[0].id : null
+  value       = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
 }
+
+
 #output "inspection_attachment_id" {
  # description = "ID of the Inspection VPC attachment"
   #value       = length(aws_ec2_transit_gateway_vpc_attachment.inspection_attachment) > 0 ? aws_ec2_transit_gateway_vpc_attachment.inspection_attachment[0].id : null
