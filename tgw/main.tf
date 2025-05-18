@@ -56,6 +56,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "inspection_attachment" {
   lifecycle {
     precondition {
       condition     = var.inspection_vpc_id != "vpc-placeholder" && length(var.inspection_subnet_ids) > 0 && var.inspection_subnet_ids[0] != "subnet-placeholder"
+      error_message = "Invalid inspection VPC ID or subnet IDs provided."
     }
   }
 }
