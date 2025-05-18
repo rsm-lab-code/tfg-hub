@@ -65,7 +65,7 @@ resource "aws_ec2_transit_gateway_route_table_association" "inspection_associati
   provider           = aws.delegated_account_us-west-2
   count = var.inspection_vpc_id != "vpc-placeholder" && length(var.inspection_subnet_ids) > 0 && var.inspection_subnet_ids[0] != "subnet-placeholder" ? 1 : 0
   
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment[0].id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt.id
 }
 
@@ -75,7 +75,7 @@ resource "aws_ec2_transit_gateway_route" "main_default_route" {
   count = var.inspection_vpc_id != "vpc-placeholder" && length(var.inspection_subnet_ids) > 0 && var.inspection_subnet_ids[0] != "subnet-placeholder" ? 1 : 0
   
   destination_cidr_block         = "0.0.0.0/0"
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment[0].id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.main_rt.id
 }
 
@@ -85,6 +85,6 @@ resource "aws_ec2_transit_gateway_route" "inspection_default_route" {
   count = var.inspection_vpc_id != "vpc-placeholder" && length(var.inspection_subnet_ids) > 0 && var.inspection_subnet_ids[0] != "subnet-placeholder" ? 1 : 0
   
   destination_cidr_block         = "0.0.0.0/0"
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment[0].id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt.id
 }
