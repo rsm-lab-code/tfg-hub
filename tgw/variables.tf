@@ -37,3 +37,9 @@ variable "tgw_route_table_ids" {
     b = string
   })
 }
+
+variable "create_vpc_attachment" {
+  description = "Whether to create the VPC attachment"
+  type        = bool
+  default     = true
+}
