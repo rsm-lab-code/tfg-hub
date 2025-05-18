@@ -40,6 +40,7 @@ resource "aws_ec2_transit_gateway_route_table" "main_rt" {
 # Attach Inspection VPC to Transit Gateway
 resource "aws_ec2_transit_gateway_vpc_attachment" "inspection_attachment" {
   provider           = aws.delegated_account_us-west-2
+  count = var.inspection_vpc_id != "vpc-placeholder" && length(var.inspection_subnet_ids) > 0 && var.inspection_subnet_ids[0] != "subnet-placeholder" ? 1 : 0
   subnet_ids         = var.inspection_subnet_ids
   transit_gateway_id = aws_ec2_transit_gateway.central_tgw.id
   vpc_id             = var.inspection_vpc_id
