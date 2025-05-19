@@ -24,6 +24,7 @@ output "route_table_ids" {
   value       = {
     inspection = aws_ec2_transit_gateway_route_table.inspection_rt.id
     main       = aws_ec2_transit_gateway_route_table.main_rt.id
+    dev        = aws_ec2_transit_gateway_route_table.dev_tgw_rt.id
   }
 }
 output "inspection_attachment_id" {
@@ -31,11 +32,10 @@ output "inspection_attachment_id" {
   value       = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
 }
 
-
-#output "inspection_attachment_id" {
- # description = "ID of the Inspection VPC attachment"
-  #value       = length(aws_ec2_transit_gateway_vpc_attachment.inspection_attachment) > 0 ? aws_ec2_transit_gateway_vpc_attachment.inspection_attachment[0].id : null
-#}
+output "dev_tgw_rt_id" {
+  description = "ID of the Development Transit Gateway route table"
+  value       = aws_ec2_transit_gateway_route_table.dev_tgw_rt.id
+}
 
 output "tgw_arn" {
   description = "ARN of the Central Transit Gateway"

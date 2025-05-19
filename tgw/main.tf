@@ -37,6 +37,27 @@ resource "aws_ec2_transit_gateway_route_table" "main_rt" {
   }
 }
 
+#create Transit gateway route tables for dev_vpc
+
+resource "aws_ec2_transit_gateway_route_table" "dev_tgw_rt" {
+  provider           = aws.delegated_account_us-west-2
+  transit_gateway_id = aws_ec2_transit_gateway.central_tgw.id
+
+  tags = {
+    Name        = "dev-transit-gateway-route-table"
+    Environment = "development"
+    ManagedBy   = "terraform"
+  }
+}
+
+# Add default route from dev route table to inspection VPC
+resource "aws_ec2_transit_gateway_route" "dev_default_route" {
+  provider                       = aws.delegated_account_us-west-2
+  destination_cidr_block         = "0.0.0.0/0"
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.dev_tgw_rt.id
+}
+
 # Attach Inspection VPC to Transit Gateway
 resource "aws_ec2_transit_gateway_vpc_attachment" "inspection_attachment" {
   provider           = aws.delegated_account_us-west-2
