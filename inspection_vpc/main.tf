@@ -240,6 +240,17 @@ resource "aws_route" "inspection_public_rt_a_to_igw" {
   gateway_id             = aws_internet_gateway.inspection_igw.id
 }
 
+
+# DUMMY CODE (testing)
+# Create public route to internet for zone A
+resource "aws_route" "inspection_public_rt_a_to_igw" {
+  provider    = aws.delegated_account_us-west-2
+  route_table_id         = aws_route_table.inspection_public_rt_a.id
+  destination_cidr_block = "8.1.2.3/32"
+  gateway_id             = aws_internet_gateway.inspection_igw.id
+}
+
+
 # Create public route to internet for zone B
 resource "aws_route" "inspection_public_rt_b_to_igw" {
   provider    = aws.delegated_account_us-west-2
