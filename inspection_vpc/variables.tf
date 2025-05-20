@@ -48,3 +48,9 @@ variable "workload_cidr_blocks" {
   type        = list(string)
   default     = ["10.0.0.0/8", "172.31.0.0/16"]
 }
+
+
+variable "transit_gateway_id" {
+  description = "ID of the Transit Gateway"
+  type        = string
+}
