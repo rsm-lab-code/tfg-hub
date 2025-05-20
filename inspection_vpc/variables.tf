@@ -49,4 +49,8 @@ variable "workload_cidr_blocks" {
   default     = ["10.0.0.0/8", "172.31.0.0/16"]
 }
 
-
+variable "dev_vpc1_cidr" {
+  description = "Dev VPC 1 CIDR Block"
+  type        = string
+  default     = "127.255.255.255/32"
+}
