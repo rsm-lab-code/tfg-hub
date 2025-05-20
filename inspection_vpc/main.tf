@@ -241,9 +241,8 @@ resource "aws_route" "inspection_public_rt_a_to_igw" {
 }
 
 
-# DUMMY CODE (testing)
 # Create public route to internet for zone A
-resource "aws_route" "inspection_public_rt_a_to_dummy" {
+resource "aws_route" "inspection_public_rt_a_to_dev_vpc1" {
   provider    = aws.delegated_account_us-west-2
   route_table_id         = aws_route_table.inspection_public_rt_a.id
   destination_cidr_block = var.dev_vpc1_cidr

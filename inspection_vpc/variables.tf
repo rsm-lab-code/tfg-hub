@@ -54,3 +54,21 @@ variable "dev_vpc1_cidr" {
   type        = string
   default     = "127.255.255.255/32"
 }
+
+variable "dev_vpc2_cidr" {
+  description = "Dev VPC 2 CIDR Block"
+  type        = string
+  default     = "127.255.255.255/32"
+}
+
+variable "nonprod_vpc1_cidr" {
+  description = "Nonprod VPC 1 CIDR Block"
+  type        = string
+  default     = "127.255.255.255/32"
+}
+
+variable "nonprod_vpc2_cidr" {
+  description = "Nonprod VPC 2 CIDR Block"
+  type        = string
+  default     = "127.255.255.255/32"
+}
