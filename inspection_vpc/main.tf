@@ -246,7 +246,7 @@ resource "aws_route" "inspection_public_rt_a_to_igw" {
 resource "aws_route" "inspection_public_rt_a_to_dummy" {
   provider    = aws.delegated_account_us-west-2
   route_table_id         = aws_route_table.inspection_public_rt_a.id
-  destination_cidr_block = dev_vpc1_cidr
+  destination_cidr_block = var.dev_vpc1_cidr
   vpc_endpoint_id        = var.firewall_endpoint_ids[0]
 }
 
