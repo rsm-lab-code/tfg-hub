@@ -241,13 +241,43 @@ resource "aws_route" "inspection_public_rt_a_to_igw" {
 }
 
 
-# Create public route to internet for zone A
+
+# Create public route to internet for zone A (dev1)
 resource "aws_route" "inspection_public_rt_a_to_dev_vpc1" {
   provider    = aws.delegated_account_us-west-2
   route_table_id         = aws_route_table.inspection_public_rt_a.id
   destination_cidr_block = var.dev_vpc1_cidr
   vpc_endpoint_id        = var.firewall_endpoint_ids[0]
 }
+
+
+# Create public route to internet for zone A (dev2)
+resource "aws_route" "inspection_public_rt_a_to_dev_vpc2" {
+  provider    = aws.delegated_account_us-west-2
+  route_table_id         = aws_route_table.inspection_public_rt_a.id
+  destination_cidr_block = var.dev_vpc2_cidr
+  vpc_endpoint_id        = var.firewall_endpoint_ids[0]
+}
+
+
+# Create public route to internet for zone B (dev1)
+resource "aws_route" "inspection_public_rt_b_to_dev_vpc1" {
+  provider    = aws.delegated_account_us-west-2
+  route_table_id         = aws_route_table.inspection_public_rt_b.id
+  destination_cidr_block = var.dev_vpc1_cidr
+  vpc_endpoint_id        = var.firewall_endpoint_ids[1]
+}
+
+
+# Create public route to internet for zone B (dev2)
+resource "aws_route" "inspection_public_rt_b_to_dev_vpc2" {
+  provider    = aws.delegated_account_us-west-2
+  route_table_id         = aws_route_table.inspection_public_rt_b.id
+  destination_cidr_block = var.dev_vpc2_cidr
+  vpc_endpoint_id        = var.firewall_endpoint_ids[1]
+}
+
+
 
 
 # Create public route to internet for zone B
