@@ -50,7 +50,3 @@ variable "workload_cidr_blocks" {
 }
 
 
-variable "transit_gateway_id" {
-  description = "ID of the Transit Gateway"
-  type        = string
-}
