@@ -356,13 +356,13 @@ resource "aws_route" "inspection_firewall_rt_b_to_nat" {
 resource "aws_route" "inspection_firewall_rt_a_to_tgw" {
   provider               = aws.delegated_account_us-west-2
   route_table_id         = aws_route_table.inspection_firewall_rt_a.id
-  destination_cidr_block = "10.0.0.0/16" 
+  destination_cidr_block = "10.0.0.0/8" 
   transit_gateway_id     = var.transit_gateway_id
 }
 
 resource "aws_route" "inspection_firewall_rt_b_to_tgw" {
   provider               = aws.delegated_account_us-west-2
   route_table_id         = aws_route_table.inspection_firewall_rt_b.id
-  destination_cidr_block = "10.0.0.0/16"  
+  destination_cidr_block = "10.0.0.0/8"  
   transit_gateway_id     = var.transit_gateway_id
 }
