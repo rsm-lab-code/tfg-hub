@@ -43,32 +43,3 @@ variable "transit_gateway_id" {
   default     = ""
 }
 
-variable "workload_cidr_blocks" {
-  description = "List of CIDR blocks for workload VPCs"
-  type        = list(string)
-  default     = ["10.0.0.0/8", "172.31.0.0/16"]
-}
-
-variable "dev_vpc1_cidr" {
-  description = "Dev VPC 1 CIDR Block"
-  type        = string
-  default     = "127.255.255.255/32"
-}
-
-variable "dev_vpc2_cidr" {
-  description = "Dev VPC 2 CIDR Block"
-  type        = string
-  default     = "127.255.255.255/32"
-}
-
-variable "nonprod_vpc1_cidr" {
-  description = "Nonprod VPC 1 CIDR Block"
-  type        = string
-  default     = "127.255.255.255/32"
-}
-
-variable "nonprod_vpc2_cidr" {
-  description = "Nonprod VPC 2 CIDR Block"
-  type        = string
-  default     = "127.255.255.255/32"
-}

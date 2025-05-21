@@ -13,12 +13,6 @@ output "main_rt_id" {
   value       = aws_ec2_transit_gateway_route_table.main_rt.id
 }
 
-# Workload route table is not created in the module
-output "workload_rt_id" {
-  description = "ID of the Workload Transit Gateway route table"
-  value       = "placeholder-workload-rt-id"
-}
-
 output "route_table_ids" {
   description = "Map of all Transit Gateway route table IDs"
   value       = {
