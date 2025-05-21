@@ -43,3 +43,9 @@ variable "transit_gateway_id" {
   default     = ""
 }
 
+###################################################################################
+variable "spoke_vpc_cidrs" {
+  description = "Map of spoke VPC names to their CIDR blocks that need routing through the firewall"
+  type        = map(string)
+  default     = {}
+}

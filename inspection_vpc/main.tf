@@ -352,6 +352,8 @@ resource "aws_route" "inspection_firewall_rt_b_to_nat" {
   nat_gateway_id         = aws_nat_gateway.inspection_nat_gw_b.id
 }
 
+##########################################################################
+
 #Inspection VPC traffic to transit gateway for all VPC CIDR blocks
 resource "aws_route" "inspection_firewall_rt_a_to_tgw" {
   provider               = aws.delegated_account_us-west-2
@@ -365,4 +367,28 @@ resource "aws_route" "inspection_firewall_rt_b_to_tgw" {
   route_table_id         = aws_route_table.inspection_firewall_rt_b.id
   destination_cidr_block = "10.0.0.0/8"  
   transit_gateway_id     = var.transit_gateway_id
+}
+
+# Create routes for spoke VPCs in inspection public rout table a
+resource "aws_route" "inspection_public_rt_a_to_spoke_vpcs" {
+  provider    = aws.delegated_account_us-west-2
+  for_each    = var.spoke_vpc_cidrs
+
+  route_table_id         = aws_route_table.inspection_public_rt_a.id
+  destination_cidr_block = each.value
+  vpc_endpoint_id        = var.firewall_endpoint_ids[0]  # endpoint for AZ a
+
+  depends_on = [aws_route_table.inspection_public_rt_a]
+}
+
+# Create routes for spoke VPCs in inspection route table b
+resource "aws_route" "inspection_public_rt_b_to_spoke_vpcs" {
+  provider    = aws.delegated_account_us-west-2
+  for_each    = var.spoke_vpc_cidrs
+
+  route_table_id         = aws_route_table.inspection_public_rt_b.id
+  destination_cidr_block = each.value
+  vpc_endpoint_id        = var.firewall_endpoint_ids[1]  # endpoint for AZ b
+
+  depends_on = [aws_route_table.inspection_public_rt_b]
 }
