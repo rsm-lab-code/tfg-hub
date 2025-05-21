@@ -122,3 +122,26 @@ resource "aws_ec2_transit_gateway_route" "inspection_default_route" {
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt.id
 }
+
+
+#############################################################3
+
+# Add routes to inspection route table for all spoke VPCs
+resource "aws_ec2_transit_gateway_route" "inspection_rt_spoke_routes" {
+  provider                       = aws.delegated_account_us-west-2
+  for_each                      = var.spoke_vpc_attachments
+
+  destination_cidr_block        = each.value.cidr_block
+  transit_gateway_attachment_id = each.value.attachment_id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt.id
+}
+
+# Add routes to main route table for all spoke VPCs
+resource "aws_ec2_transit_gateway_route" "main_rt_spoke_routes" {
+  provider                       = aws.delegated_account_us-west-2
+  for_each                      = var.spoke_vpc_attachments
+
+  destination_cidr_block        = each.value.cidr_block
+  transit_gateway_attachment_id = each.value.attachment_id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.main_rt.id
+}

@@ -38,3 +38,12 @@ variable "tgw_route_table_ids" {
   })
 }
 
+########################################################
+variable "spoke_vpc_attachments" {
+  description = "Map of spoke VPC names to their CIDR blocks and TGW attachment IDs"
+  type = map(object({
+    cidr_block    = string
+    attachment_id = string
+  }))
+  default = {}
+}
