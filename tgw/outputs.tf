@@ -20,6 +20,7 @@ output "route_table_ids" {
     main       = aws_ec2_transit_gateway_route_table.main_rt.id
     dev        = aws_ec2_transit_gateway_route_table.dev_tgw_rt.id
     nonprod    = aws_ec2_transit_gateway_route_table.nonprod_tgw_rt.id
+    prod       = aws_ec2_transit_gateway_route_table.prod_tgw_rt.id
   }
 }
 output "inspection_attachment_id" {
@@ -36,6 +37,11 @@ output "dev_tgw_rt_id" {
 output "nonprod_tgw_rt_id" {
   description = "ID of the Non-Prod Transit Gateway route table"
   value       = aws_ec2_transit_gateway_route_table.nonprod_tgw_rt.id
+}
+
+output "prod_tgw_rt_id" {
+  description = "ID of the Production Transit Gateway route table"
+  value       = aws_ec2_transit_gateway_route_table.prod_tgw_rt.id
 }
 
 output "tgw_arn" {
