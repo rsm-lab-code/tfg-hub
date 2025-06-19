@@ -125,28 +125,23 @@ resource "aws_ec2_transit_gateway_route" "inspection_default_route" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt.id
 }
 
+###########################################
 
-#############################################################3
-
-# Add routes to inspection route table for all spoke VPCs
-/*
-resource "aws_ec2_transit_gateway_route" "inspection_rt_spoke_routes" {
-  provider                       = aws.delegated_account_us-west-2
-  for_each                      = var.spoke_vpc_attachments
-
-  destination_cidr_block        = each.value.cidr_block
-  transit_gateway_attachment_id = each.value.attachment_id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt.id
+# Create Global Network
+resource "aws_networkmanager_global_network" "main" {
+  provider    = aws.delegated_account_us-west-2
+  description = "Global network for hub-and-spoke architecture"
+  
+  tags = {
+    Name        = "hub-spoke-global-network"
+    Environment = "shared"
+    ManagedBy   = "terraform"
+  }
 }
-*/
-# Add routes to main route table for all spoke VPCs
-/*
-resource "aws_ec2_transit_gateway_route" "main_rt_spoke_routes" {
-  provider                       = aws.delegated_account_us-west-2
-  for_each                      = var.spoke_vpc_attachments
 
-  destination_cidr_block        = each.value.cidr_block
-  transit_gateway_attachment_id = each.value.attachment_id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.main_rt.id
+# Register Transit Gateway with Global Network
+resource "aws_networkmanager_transit_gateway_registration" "main" {
+  provider            = aws.delegated_account_us-west-2
+  global_network_id   = aws_networkmanager_global_network.main.id
+  transit_gateway_arn = aws_ec2_transit_gateway.central_tgw.arn
 }
-*/

@@ -28,11 +28,6 @@ output "inspection_attachment_id" {
   value       = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
 }
 
-#output "dev_tgw_rt_id" {
-# description = "ID of the Development Transit Gateway route table"
-# value       = aws_ec2_transit_gateway_route_table.dev_tgw_rt.id
-#}
-
 
 output "nonprod_tgw_rt_id" {
   description = "ID of the Non-Prod Transit Gateway route table"
@@ -52,4 +47,28 @@ output "tgw_arn" {
 output "tgw_owner_id" {
   description = "Owner ID of the Transit Gateway"
   value       = aws_ec2_transit_gateway.central_tgw.owner_id
+}
+
+
+###################################################################
+
+# Network Manager Outputs
+output "global_network_id" {
+  description = "ID of the Global Network"
+  value       = aws_networkmanager_global_network.main.id
+}
+
+output "global_network_arn" {
+  description = "ARN of the Global Network"
+  value       = aws_networkmanager_global_network.main.arn
+}
+
+output "transit_gateway_registration_id" {
+  description = "ID of the Transit Gateway registration"
+  value       = aws_networkmanager_transit_gateway_registration.main.id
+}
+
+output "network_manager_console_url" {
+  description = "URL to access Network Manager console"
+  value       = "https://${var.aws_regions[0]}.console.aws.amazon.com/networkmanager/networks/${aws_networkmanager_global_network.main.id}/global-networks"
 }
