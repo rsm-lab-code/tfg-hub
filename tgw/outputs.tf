@@ -75,8 +75,8 @@ output "network_manager_console_url" {
 
 
 ###########################################
-# TGW SHARING OUTPUTS
 
+TGW Sharing outputs
 
 output "tgw_resource_share_id" {
   description = "ID of the TGW resource share"
@@ -88,16 +88,20 @@ output "tgw_resource_share_arn" {
   value       = aws_ram_resource_share.tgw_share.arn
 }
 
-output "tgw_shared_with_organization" {
-  description = "Organization ID that TGW is shared with"
-  value       = var.organization_id
+output "tgw_shared_accounts" {
+  description = "List of account IDs that TGW is shared with"
+  value = compact([
+    var.management_account_id,
+    var.tfg_test_account1_id
+  ])
 }
 
 output "tgw_sharing_status" {
   description = "Status of TGW sharing configuration"
   value = {
-    sharing_method     = "organization_wide"
-    organization_id    = var.organization_id
+    sharing_method     = "individual_accounts"
+    shared_accounts    = compact([var.management_account_id, var.tfg_test_account1_id])
+    additional_spoke_accounts = var.spoke_account_ids
     resource_share_id  = aws_ram_resource_share.tgw_share.id
     resource_share_arn = aws_ram_resource_share.tgw_share.arn
   }

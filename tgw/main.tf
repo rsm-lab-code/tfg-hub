@@ -155,7 +155,7 @@ resource "aws_networkmanager_transit_gateway_registration" "main" {
 #############################################################################
 
 
-# Share Transit Gateway with organization
+# Share Transit Gateway with specific accounts
 resource "aws_ram_resource_share" "tgw_share" {
   provider                  = aws.delegated_account_us-west-2
   name                      = "central-tgw-share"
@@ -175,9 +175,26 @@ resource "aws_ram_resource_association" "tgw_association" {
   resource_share_arn = aws_ram_resource_share.tgw_share.arn
 }
 
-# Share with entire organization
-resource "aws_ram_principal_association" "tgw_organization_share" {
+# Share with management account
+resource "aws_ram_principal_association" "tgw_management_account" {
   provider           = aws.delegated_account_us-west-2
-  principal          = "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:organization/${var.organization_id}"
+  count              = var.management_account_id != "" ? 1 : 0
+  principal          = var.management_account_id
+  resource_share_arn = aws_ram_resource_share.tgw_share.arn
+}
+
+# Share with test account
+resource "aws_ram_principal_association" "tgw_test_account" {
+  provider           = aws.delegated_account_us-west-2
+  count              = var.tfg_test_account1_id != "" ? 1 : 0
+  principal          = var.tfg_test_account1_id
+  resource_share_arn = aws_ram_resource_share.tgw_share.arn
+}
+
+# Share with additional spoke accounts (dynamic list)
+resource "aws_ram_principal_association" "tgw_spoke_accounts" {
+  provider           = aws.delegated_account_us-west-2
+  for_each           = toset(var.spoke_account_ids)
+  principal          = each.value
   resource_share_arn = aws_ram_resource_share.tgw_share.arn
 }

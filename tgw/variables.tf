@@ -51,7 +51,26 @@ variable "spoke_vpc_attachments" {
 
 ##################################################
 
-variable "organization_id" {
-  description = "AWS Organization ID for sharing TGW with entire organization"
+variable "management_account_id" {
+  description = "AWS Management Account ID to share TGW with"
   type        = string
+  default     = ""
+}
+
+variable "tfg_test_account1_id" {
+  description = "AWS Account ID for tfg-test-account1 to share TGW with"
+  type        = string
+  default     = ""
+}
+
+variable "spoke_account_ids" {
+  description = "List of additional AWS account IDs to share TGW with"
+  type        = list(string)
+  default     = []
+}
+
+variable "organization_id" {
+  description = "AWS Organization ID (kept for reference but not used for sharing)"
+  type        = string
+  default     = ""
 }
