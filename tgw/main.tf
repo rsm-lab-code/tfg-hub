@@ -1,3 +1,7 @@
+# Data source to get current AWS caller identity
+data "aws_caller_identity" "current" {
+  provider = aws.delegated_account_us-west-2
+}
 
 # Create Transit Gateway
 resource "aws_ec2_transit_gateway" "central_tgw" {
