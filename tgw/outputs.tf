@@ -76,7 +76,7 @@ output "network_manager_console_url" {
 
 ###########################################
 
-TGW Sharing outputs
+#TGW Sharing outputs
 
 output "tgw_resource_share_id" {
   description = "ID of the TGW resource share"
