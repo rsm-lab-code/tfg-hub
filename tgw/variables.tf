@@ -47,3 +47,11 @@ variable "spoke_vpc_attachments" {
   }))
   default = {}
 }
+
+
+##################################################
+
+variable "organization_id" {
+  description = "AWS Organization ID for sharing TGW with entire organization"
+  type        = string
+}

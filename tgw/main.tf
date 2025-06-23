@@ -145,3 +145,35 @@ resource "aws_networkmanager_transit_gateway_registration" "main" {
   global_network_id   = aws_networkmanager_global_network.main.id
   transit_gateway_arn = aws_ec2_transit_gateway.central_tgw.arn
 }
+
+
+
+#############################################################################
+
+
+# Share Transit Gateway with organization
+resource "aws_ram_resource_share" "tgw_share" {
+  provider                  = aws.delegated_account_us-west-2
+  name                      = "central-tgw-share"
+  allow_external_principals = true
+  
+  tags = {
+    Name        = "central-tgw-share"
+    Environment = "shared"
+    ManagedBy   = "terraform"
+  }
+}
+
+# Associate TGW with the resource share
+resource "aws_ram_resource_association" "tgw_association" {
+  provider           = aws.delegated_account_us-west-2
+  resource_arn       = aws_ec2_transit_gateway.central_tgw.arn
+  resource_share_arn = aws_ram_resource_share.tgw_share.arn
+}
+
+# Share with entire organization
+resource "aws_ram_principal_association" "tgw_organization_share" {
+  provider           = aws.delegated_account_us-west-2
+  principal          = var.organization_id
+  resource_share_arn = aws_ram_resource_share.tgw_share.arn
+}

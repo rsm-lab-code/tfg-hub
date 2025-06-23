@@ -72,3 +72,33 @@ output "network_manager_console_url" {
   description = "URL to access Network Manager console"
   value       = "https://${var.aws_regions[0]}.console.aws.amazon.com/networkmanager/networks/${aws_networkmanager_global_network.main.id}/global-networks"
 }
+
+
+###########################################
+# TGW SHARING OUTPUTS
+
+
+output "tgw_resource_share_id" {
+  description = "ID of the TGW resource share"
+  value       = aws_ram_resource_share.tgw_share.id
+}
+
+output "tgw_resource_share_arn" {
+  description = "ARN of the TGW resource share"
+  value       = aws_ram_resource_share.tgw_share.arn
+}
+
+output "tgw_shared_with_organization" {
+  description = "Organization ID that TGW is shared with"
+  value       = var.organization_id
+}
+
+output "tgw_sharing_status" {
+  description = "Status of TGW sharing configuration"
+  value = {
+    sharing_method     = "organization_wide"
+    organization_id    = var.organization_id
+    resource_share_id  = aws_ram_resource_share.tgw_share.id
+    resource_share_arn = aws_ram_resource_share.tgw_share.arn
+  }
+}
