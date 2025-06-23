@@ -174,6 +174,6 @@ resource "aws_ram_resource_association" "tgw_association" {
 # Share with entire organization
 resource "aws_ram_principal_association" "tgw_organization_share" {
   provider           = aws.delegated_account_us-west-2
-  principal          = var.organization_id
+  principal          = "arn:aws:organizations::${data.aws_caller_identity.current.account_id}:organization/${var.organization_id}"
   resource_share_arn = aws_ram_resource_share.tgw_share.arn
 }
