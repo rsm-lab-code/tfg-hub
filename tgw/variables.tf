@@ -81,12 +81,12 @@ variable "organization_id" {
 variable "prod_cidr_block" {
   description = "CIDR block for production environment"
   type        = string
-  default     = "10.0.0.0/17"  # Based on your current configuration
+  default     = "10.0.0.0/17"  
 }
 
 variable "nonprod_cidr_block" {
   description = "CIDR block for non-production environment"
   type        = string
-  default     = "10.0.128.0/17"  # Based on your current configuration
+  default     = "10.0.128.0/17"  
 }
 ########################################################
