@@ -73,8 +73,25 @@ output "network_manager_console_url" {
   value       = "https://${var.aws_regions[0]}.console.aws.amazon.com/networkmanager/networks/${aws_networkmanager_global_network.main.id}/global-networks"
 }
 
+########################################################
 
-###########################################
+# Blackhole outputs
+output "environment_separation_routes" {
+  description = "Details of environment separation routes"
+  value = {
+    prod_to_nonprod_blackhole = {
+      cidr_block = aws_ec2_transit_gateway_route.prod_to_nonprod_blackhole.destination_cidr_block
+      route_table = aws_ec2_transit_gateway_route_table.prod_tgw_rt.id
+    }
+    nonprod_to_prod_blackhole = {
+      cidr_block = aws_ec2_transit_gateway_route.nonprod_to_prod_blackhole.destination_cidr_block
+      route_table = aws_ec2_transit_gateway_route_table.nonprod_tgw_rt.id
+    }
+  }
+}
+
+########################################################
+
 
 #TGW Sharing outputs
 

@@ -48,8 +48,7 @@ variable "spoke_vpc_attachments" {
   default = {}
 }
 
-
-##################################################
+########################################################
 
 variable "management_account_id" {
   description = "AWS Management Account ID to share TGW with"
@@ -74,3 +73,20 @@ variable "organization_id" {
   type        = string
   default     = ""
 }
+
+########################################################
+
+#Blackhole Variables
+
+variable "prod_cidr_block" {
+  description = "CIDR block for production environment"
+  type        = string
+  default     = "10.0.0.0/17"  # Based on your current configuration
+}
+
+variable "nonprod_cidr_block" {
+  description = "CIDR block for non-production environment"
+  type        = string
+  default     = "10.0.128.0/17"  # Based on your current configuration
+}
+########################################################
