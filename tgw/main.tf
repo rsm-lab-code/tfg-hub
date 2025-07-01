@@ -102,6 +102,22 @@ resource "aws_ec2_transit_gateway_route" "nonprod_to_prod_blackhole" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.nonprod_tgw_rt.id
 }
 
+# Add a specific route for inspection VPC in both prod and nonprod route tables
+# This ensures traffic to the inspection VPC is never blackholed
+resource "aws_ec2_transit_gateway_route" "prod_to_inspection_vpc" {
+  provider                       = aws.delegated_account_us-west-2
+  destination_cidr_block         = var.inspection_vpc_cidr
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.prod_tgw_rt.id
+}
+
+resource "aws_ec2_transit_gateway_route" "nonprod_to_inspection_vpc" {
+  provider                       = aws.delegated_account_us-west-2
+  destination_cidr_block         = var.inspection_vpc_cidr
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.inspection_attachment.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.nonprod_tgw_rt.id
+}
+
 ############################################
 
 
