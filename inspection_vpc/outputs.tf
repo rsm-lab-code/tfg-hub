@@ -71,3 +71,9 @@ output "tgw_route_tables" {
     b = aws_route_table.inspection_tgw_rt_b.id
   }
 }
+
+
+output "flow_logs_s3_bucket_arn" {
+  description = "ARN of the S3 bucket for VPC Flow Logs"
+  value       = aws_s3_bucket.vpc_flow_logs.arn
+}

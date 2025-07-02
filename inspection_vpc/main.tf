@@ -397,3 +397,74 @@ resource "aws_route" "inspection_public_rt_b_to_spoke_vpcs" {
 
 #####################################################################################
 
+# Centralized IAM role for all VPC Flow Logs
+resource "aws_iam_role" "vpc_flow_logs_role" {
+  provider = aws.delegated_account_us-west-2
+  name     = "vpc-flow-logs-role"
+  
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Service = "vpc-flow-logs.amazonaws.com"
+      }
+      Action = "sts:AssumeRole"
+    }]
+  })
+
+  tags = {
+    Name        = "vpc-flow-logs-role"
+    Environment = "shared"
+    ManagedBy   = "terraform"
+  }
+}
+
+resource "aws_iam_role_policy" "vpc_flow_logs_policy" {
+  provider = aws.delegated_account_us-west-2
+  name     = "vpc-flow-logs-policy"
+  role     = aws_iam_role.vpc_flow_logs_role.id
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams"
+      ]
+      Resource = "*"
+    }]
+  })
+}
+
+# Create centralized S3 bucket for VPC Flow Logs
+resource "aws_s3_bucket" "vpc_flow_logs" {
+  provider = aws.delegated_account_us-west-2
+  bucket   = "vpc-flow-logs-${var.delegated_account_id}"
+  
+  tags = {
+    Name        = "vpc-flow-logs"
+    Environment = "shared"
+    ManagedBy   = "terraform"
+  }
+}
+
+# Set up Flow Logs for the Inspection VPC
+resource "aws_flow_log" "inspection_vpc_flow_log" {
+  provider             = aws.delegated_account_us-west-2
+  log_destination      = aws_s3_bucket.vpc_flow_logs.arn
+  log_destination_type = "s3"
+  traffic_type         = "ALL"
+  vpc_id               = aws_vpc.inspection_vpc.id
+  
+  tags = {
+    Name        = "inspection-vpc-flow-log"
+    Environment = "shared"
+    ManagedBy   = "terraform"
+  }
+}
+
