@@ -84,7 +84,7 @@ resource "aws_ec2_transit_gateway_route" "prod_default_route" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.prod_tgw_rt.id
 }
 
-############################################
+#####################################################################################################################
 
 # Add blackhole route from prod to nonprod CIDRs
 resource "aws_ec2_transit_gateway_route" "prod_to_nonprod_blackhole" {
@@ -118,7 +118,7 @@ resource "aws_ec2_transit_gateway_route" "nonprod_to_inspection_vpc" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.nonprod_tgw_rt.id
 }
 
-############################################
+#####################################################################################################################
 
 
 # Attach Inspection VPC to Transit Gateway
