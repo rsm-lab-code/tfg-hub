@@ -397,50 +397,6 @@ resource "aws_route" "inspection_public_rt_b_to_spoke_vpcs" {
 
 #####################################################################################
 
-# Centralized IAM role for all VPC Flow Logs
-resource "aws_iam_role" "vpc_flow_logs_role" {
-  provider = aws.delegated_account_us-west-2
-  name     = "vpc-flow-logs-role"
-  
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = {
-        Service = "vpc-flow-logs.amazonaws.com"
-      }
-      Action = "sts:AssumeRole"
-    }]
-  })
-
-  tags = {
-    Name        = "vpc-flow-logs-role"
-    Environment = "shared"
-    ManagedBy   = "terraform"
-  }
-}
-
-resource "aws_iam_role_policy" "vpc_flow_logs_policy" {
-  provider = aws.delegated_account_us-west-2
-  name     = "vpc-flow-logs-policy"
-  role     = aws_iam_role.vpc_flow_logs_role.id
-  
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Action = [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents",
-        "logs:DescribeLogGroups",
-        "logs:DescribeLogStreams"
-      ]
-      Resource = "*"
-    }]
-  })
-}
-
 # Create centralized S3 bucket for VPC Flow Logs
 resource "aws_s3_bucket" "vpc_flow_logs" {
   provider = aws.delegated_account_us-west-2
@@ -451,6 +407,38 @@ resource "aws_s3_bucket" "vpc_flow_logs" {
     Environment = "shared"
     ManagedBy   = "terraform"
   }
+}
+
+resource "aws_s3_bucket_policy" "vpc_flow_logs_policy" {
+  provider = aws.delegated_account_us-west-2
+  bucket   = aws_s3_bucket.vpc_flow_logs.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        }
+        Action = "s3:PutObject"
+        Resource = "${aws_s3_bucket.vpc_flow_logs.arn}/*"
+        Condition = {
+          StringEquals = {
+            "s3:x-amz-acl" = "bucket-owner-full-control"
+          }
+        }
+      },
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        }
+        Action = "s3:GetBucketAcl"
+        Resource = aws_s3_bucket.vpc_flow_logs.arn
+      }
+    ]
+  })
 }
 
 # Set up Flow Logs for the Inspection VPC
